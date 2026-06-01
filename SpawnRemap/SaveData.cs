@@ -10,10 +10,11 @@ namespace SpawnRemap;
 
 using SpawnMappings = Dictionary<string, List<SpawnData>>;
 
+[Serializable]
 struct SpawnData
 {
-    internal Vector3 position;
-    internal Vector3 angle;
+    internal SerializableVector3 position;
+    internal SerializableVector3 angle;
 }
 
 static class SaveData
@@ -53,5 +54,25 @@ static class SaveData
         {
             Debug.LogError($"SpawnRemapper: Failed to save data {e}");
         }
+    }
+}
+
+[Serializable]
+struct SerializableVector3(float x, float y, float z)
+{
+    float x = x;
+    float y = y;
+    float z = z;
+
+    // Allows: Vector3 unityVec = mySerializableVec;
+    public static implicit operator Vector3(SerializableVector3 sVec)
+    {
+        return new Vector3(sVec.x, sVec.y, sVec.z);
+    }
+
+    // Allows: SerializableVector3 mySerializableVec = unityVec;
+    public static implicit operator SerializableVector3(Vector3 uVec)
+    {
+        return new SerializableVector3(uVec.x, uVec.y, uVec.z);
     }
 }
