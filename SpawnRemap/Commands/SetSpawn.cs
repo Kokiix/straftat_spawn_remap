@@ -51,7 +51,10 @@ class SpawnRemapCommands
         }
         else if (int.TryParse(spawnPointIndex, out int spawnIdx))
         {
-            spawns.RemoveAt(spawnIdx);
+            if (spawns[spawnIdx].angle == new SpawnData().angle)
+                throw new CommandException($"Spawn #{spawnIdx} has no remap!");
+            else
+                spawns[spawnIdx] = new SpawnData();
         }
         else
         {
