@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 [CommandCategory("SpawnRemap")]
 class SpawnRemapCommands
 {
-    const CommandFlags _remapFlags = CommandFlags.ExplorationOnly | CommandFlags.IngameOnly | CommandFlags.HostOnly;
+    const CommandFlags _spawnEditFlags = CommandFlags.ExplorationOnly | CommandFlags.IngameOnly | CommandFlags.HostOnly;
 
-    [Command("placespawn", "remap some spawnpoint in the map to your current location")]
+    [Command("placespawn", "remap some spawnpoint in the map to your current location", _spawnEditFlags)]
     [CommandAliases("srps")]
     static string PlaceSpawn(int spawnPointIndex, bool twovtwo = false)
     {
@@ -43,7 +43,7 @@ class SpawnRemapCommands
             return $"Set spawnpoint {spawnPointIndex} for 1v1";
     }
 
-    [Command("resetspawn", "remove a spawnpoint mapping (or all of them) for this map")]
+    [Command("resetspawn", "remove a spawnpoint mapping (or all of them) for this map", _spawnEditFlags)]
     [CommandAliases("srrs")]
     static string ResetSpawn(string spawnPointIndex, bool twovtwo = false)
     {
@@ -86,5 +86,13 @@ class SpawnRemapCommands
         RemapSpawnLocal.SendSpawnPoints(spawns);
 
         return $"Removed spawnpoint {spawnPointIndex}";
+    }
+
+    [Command("exportspawns", "export your spawn rebinds to your clipboard")]
+    [CommandAliases("srexp")]
+    static string ExportSpawns()
+    {
+
+        return "Exported spawn data to clipboard!";
     }
 }

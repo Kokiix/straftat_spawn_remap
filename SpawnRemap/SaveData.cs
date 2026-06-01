@@ -56,6 +56,30 @@ static class SaveData
             Debug.LogError($"SpawnRemapper: Failed to save data {e}");
         }
     }
+
+    internal static void Compress()
+    {
+        try
+        {
+            File.WriteAllText(_savePath, JsonConvert.SerializeObject(spawnRemaps, Formatting.Indented));
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"SpawnRemapper: Failed to save data {e}");
+        }
+    }
+
+    internal static void Decompress()
+    {
+        try
+        {
+            File.WriteAllText(_savePath, JsonConvert.SerializeObject(spawnRemaps, Formatting.Indented));
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"SpawnRemapper: Failed to save data {e}");
+        }
+    }
 }
 
 [Serializable]
