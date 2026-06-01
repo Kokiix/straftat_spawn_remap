@@ -33,6 +33,8 @@ class SpawnRemapCommands
         SaveData.spawnRemaps[map] = spawns;
         SaveData.Save();
 
+        RemapSpawnLocal.SendSpawnPoints(spawns);
+
         return $"Set spawnpoint {spawnPointIndex}";
     }
 
@@ -51,7 +53,7 @@ class SpawnRemapCommands
         }
         else if (int.TryParse(spawnPointIndex, out int spawnIdx))
         {
-            if ((Vector3)spawns[spawnIdx].rotation == new SpawnData().rotation)
+            if (spawns[spawnIdx].rotation == new Vector3())
                 throw new CommandException($"Spawn #{spawnIdx} has no remap!");
             else
                 spawns[spawnIdx] = new SpawnData();

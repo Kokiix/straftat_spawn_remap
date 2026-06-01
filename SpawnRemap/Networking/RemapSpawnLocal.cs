@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using HarmonyLib;
 using MyceliumNetworking;
 using Newtonsoft.Json;
 using SpawnRemap;
@@ -19,22 +21,41 @@ class RemapSpawnLocal : MonoBehaviour
             MyceliumID,
             "MoveSpawnPoints",
             ReliableType.Reliable,
-            JsonConvert.SerializeObject(SaveData.spawnRemaps)
+            JsonConvert.SerializeObject(spawns)
         );
     }
 
     [CustomRPC]
     void MoveSpawnPoints(string spawnJSON)
     {
+        List<SpawnData> spawnRemaps;
         try
         {
-            JsonConvert.DeserializeObject<List<SpawnData>>(spawnJSON);
+            spawnRemaps = JsonConvert.DeserializeObject<List<SpawnData>>(spawnJSON);
         }
         catch (System.Exception e)
         {
             Debug.LogError($"SpawnRemapper: Failed to decode JSON from host: {e}");
+            return;
         }
 
-        SpawnPoint[] spawns = Object.FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None);
+        List<Transform> spawns = Object.FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None).Select(s => s.transform).ToList();
+        foreach (var spawnPoint in spawns)
+        {
+            int spawnIdx;
+            try
+            {
+                spawnIdx = int.Parse(spawnPoint.name[^1].ToString());
+            }
+            catch (System.Exception)
+            {
+                Debug.LogError("uhhhh this map has weird spawn names");
+                return;
+            }
+
+            if (spawnRemaps[spawnIdx].rotation == new Vector3()) continue;
+            spawnPoint.position = spawnRemaps[spawnIdx].position;
+            spawnPoint.eulerAngles = spawnRemaps[spawnIdx].rotation;
+        }
     }
 }
