@@ -51,6 +51,7 @@ class RemapSpawnLocal : MonoBehaviour
         var newList = new List<Transform>();
         newList.AddRange(spawns.Where(t => t.parent.tag != "Spawnpoints4Player"));
         newList.AddRange(spawns.Where(t => t.parent.tag == "Spawnpoints4Player"));
+        spawns = newList;
 
         for (int i = 0; i < spawnRemaps.Count; i++)
         {
