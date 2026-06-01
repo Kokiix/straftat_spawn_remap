@@ -27,7 +27,7 @@ class SpawnRemapCommands
         spawns[spawnPointIndex] = new SpawnData()
         {
             position = player.transform.position,
-            angle = new Vector3(player.rotationX, player.transform.rotation.eulerAngles.y, player.rotationZ)
+            rotation = new Vector3(player.rotationX, player.transform.rotation.eulerAngles.y, player.rotationZ)
         };
 
         SaveData.spawnRemaps[map] = spawns;
@@ -51,7 +51,7 @@ class SpawnRemapCommands
         }
         else if (int.TryParse(spawnPointIndex, out int spawnIdx))
         {
-            if ((Vector3)spawns[spawnIdx].angle == new SpawnData().angle)
+            if ((Vector3)spawns[spawnIdx].rotation == new SpawnData().rotation)
                 throw new CommandException($"Spawn #{spawnIdx} has no remap!");
             else
                 spawns[spawnIdx] = new SpawnData();

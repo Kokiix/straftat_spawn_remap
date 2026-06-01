@@ -13,8 +13,8 @@ using SpawnMappings = Dictionary<string, List<SpawnData>>;
 [Serializable]
 struct SpawnData
 {
-    internal SerializableVector3 position;
-    internal SerializableVector3 angle;
+    public SerializableVector3 position;
+    public SerializableVector3 rotation;
 }
 
 static class SaveData
@@ -60,9 +60,9 @@ static class SaveData
 [Serializable]
 struct SerializableVector3(float x, float y, float z)
 {
-    float x = x;
-    float y = y;
-    float z = z;
+    public float x = x;
+    public float y = y;
+    public float z = z;
 
     // Allows: Vector3 unityVec = mySerializableVec;
     public static implicit operator Vector3(SerializableVector3 sVec)
