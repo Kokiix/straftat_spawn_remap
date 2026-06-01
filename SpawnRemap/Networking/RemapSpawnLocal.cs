@@ -23,11 +23,13 @@ class RemapSpawnLocal : MonoBehaviour
             ReliableType.Reliable,
             JsonConvert.SerializeObject(spawns)
         );
+        Debug.LogError("sent RPC");
     }
 
     [CustomRPC]
     void MoveSpawnPoints(string spawnJSON)
     {
+        Debug.LogError("received RPC");
         List<SpawnData> spawnRemaps;
         try
         {

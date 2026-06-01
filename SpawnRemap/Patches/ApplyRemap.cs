@@ -5,6 +5,7 @@ static class ApplyRemap
 {
     internal static void Init()
     {
+        // uhh its a patch in spirit
         SceneManager.sceneLoaded += DetermineRemapping;
     }
 

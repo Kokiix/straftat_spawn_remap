@@ -66,6 +66,8 @@ class SpawnRemapCommands
         SaveData.spawnRemaps[map] = spawns;
         SaveData.Save();
 
+        RemapSpawnLocal.SendSpawnPoints(spawns);
+
         return $"Removed spawnpoint {spawnPointIndex}";
     }
 }
