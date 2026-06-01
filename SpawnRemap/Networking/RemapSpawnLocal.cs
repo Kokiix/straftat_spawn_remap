@@ -56,7 +56,7 @@ class RemapSpawnLocal : MonoBehaviour
                 return;
             }
 
-            if (spawnRemaps[spawnIdx].rotation == new Vector3())
+            if (spawnRemaps[spawnIdx].position == new Vector3())
             {
                 if (originalSpawnLocations[spawnIdx].position != new Vector3())
                 {
@@ -66,9 +66,13 @@ class RemapSpawnLocal : MonoBehaviour
             }
             else
             {
-                var origPos = originalSpawnLocations[spawnIdx];
-                origPos.position = spawnPoint.position;
-                origPos.rotation = new Vector3(spawnPoint.rotation.eulerAngles.x, spawnPoint.rotation.eulerAngles.y, spawnPoint.rotation.eulerAngles.z);
+                if (originalSpawnLocations[spawnIdx].position == new Vector3())
+                {
+                    var origPos = originalSpawnLocations[spawnIdx];
+                    origPos.position = spawnPoint.position;
+                    origPos.rotation = new Vector3(spawnPoint.rotation.eulerAngles.x, spawnPoint.rotation.eulerAngles.y, spawnPoint.rotation.eulerAngles.z);
+                    originalSpawnLocations[spawnIdx] = origPos;
+                }
 
                 spawnPoint.position = spawnRemaps[spawnIdx].position;
                 spawnPoint.eulerAngles = spawnRemaps[spawnIdx].rotation;
