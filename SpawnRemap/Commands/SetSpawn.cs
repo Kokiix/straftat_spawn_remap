@@ -12,7 +12,7 @@ class SpawnRemapCommands
 
     [Command("placespawn", "remap some spawnpoint in the map to your current location")]
     [CommandAliases("srps")]
-    static void PlaceSpawn(int spawnPointIndex)
+    static string PlaceSpawn(int spawnPointIndex)
     {
         if (spawnPointIndex < 0 || spawnPointIndex > 3) throw new CommandException("Input a spawn # from 0-3!");
 
@@ -32,11 +32,13 @@ class SpawnRemapCommands
 
         SaveData.spawnRemaps[map] = spawns;
         SaveData.Save();
+
+        return $"Set spawnpoint {spawnPointIndex}";
     }
 
     [Command("resetspawn", "remove a spawnpoint mapping (or all of them) for this map")]
     [CommandAliases("srrs")]
-    static void ResetSpawn(string spawnPointIndex)
+    static string ResetSpawn(string spawnPointIndex)
     {
         var map = SceneManager.GetActiveScene().name;
         if (!SaveData.spawnRemaps.TryGetValue(map, out List<SpawnData> spawns))
@@ -58,5 +60,7 @@ class SpawnRemapCommands
 
         SaveData.spawnRemaps[map] = spawns;
         SaveData.Save();
+
+        return $"Removed spawnpoint {spawnPointIndex}";
     }
 }
