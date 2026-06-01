@@ -8,7 +8,7 @@ using SpawnRemap;
 
 [assembly: StraftatMod(isVanillaCompatible: false)]
 
-[BepInDependency(ChatCommands.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
+[BepInDependency(ChatCommands.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class SRPlugin : BaseUnityPlugin
 {
@@ -20,6 +20,7 @@ public class SRPlugin : BaseUnityPlugin
         this.gameObject.hideFlags = HideFlags.HideAndDontSave;
 
         InitConfig();
+        SaveData.Init();
     }
 
     void InitConfig()
@@ -32,14 +33,11 @@ public class SRPlugin : BaseUnityPlugin
     }
 
     // Debug
-    // void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.V))
-    //     {
-    //         if (gameObject.TryGetComponent(out TestBehav test))
-    //             UnityEngine.Object.Destroy(test);
-    //         else
-    //             gameObject.AddComponent<TestBehav>();
-    //     }
-    // }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.LogError(SceneMotor.Instance.currentSceneName);
+        }
+    }
 }

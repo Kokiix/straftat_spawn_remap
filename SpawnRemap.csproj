@@ -5,7 +5,7 @@
         <Authors>Koki</Authors>
 
         <BepInExPluginGuid>com.koki.spawnremap</BepInExPluginGuid>
-        <BepInExPluginName>Spawn Remap</BepInExPluginName>
+        <BepInExPluginName>Spawn Remapper</BepInExPluginName>
         <BepInExPluginVersion>1.0.0</BepInExPluginVersion>
 
         <BepInExPluginDir>C:\Users\koki\AppData\Roaming\com.kesomannen.gale\straftat\profiles\Default\BepInEx\plugins</BepInExPluginDir>
