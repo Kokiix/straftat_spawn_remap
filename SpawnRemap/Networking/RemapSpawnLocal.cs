@@ -5,6 +5,7 @@ using MyceliumNetworking;
 using Newtonsoft.Json;
 using SpawnRemap;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 class RemapSpawnLocal : MonoBehaviour
 {
@@ -13,7 +14,7 @@ class RemapSpawnLocal : MonoBehaviour
     void Awake()
     {
         MyceliumNetwork.RegisterNetworkObject(this, MyceliumID);
-        originalSpawnLocations = [new SpawnData(), new SpawnData(), new SpawnData(), new SpawnData()];
+        originalSpawnLocations = [new SpawnData(), new SpawnData(), new SpawnData(), new SpawnData(), new SpawnData(), new SpawnData()];
     }
 
     internal static void SendSpawnPoints(List<SpawnData> spawns)
@@ -42,40 +43,38 @@ class RemapSpawnLocal : MonoBehaviour
             return;
         }
 
-        List<Transform> spawns = Object.FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None).Select(s => s.transform).ToList();
-        foreach (var spawnPoint in spawns)
-        {
-            int spawnIdx;
-            try
-            {
-                spawnIdx = int.Parse(spawnPoint.name[^1].ToString());
-            }
-            catch (System.Exception)
-            {
-                Debug.LogError("uhhhh this map has weird spawn names");
-                return;
-            }
+        List<Transform> spawns = Object.FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None)
+        .Select(s => s.transform)
+        .OrderBy(t => t.name)
+        .ToList();
 
-            if (spawnRemaps[spawnIdx].position == new Vector3())
+        var newList = new List<Transform>();
+        newList.AddRange(spawns.Where(t => t.parent.tag != "Spawnpoints4Player"));
+        newList.AddRange(spawns.Where(t => t.parent.tag == "Spawnpoints4Player"));
+
+        for (int i = 0; i < spawnRemaps.Count; i++)
+        {
+            var spawnPoint = spawns[i];
+            if (spawnRemaps[i].position == new Vector3())
             {
-                if (originalSpawnLocations[spawnIdx].position != new Vector3())
+                if (originalSpawnLocations[i].position != new Vector3())
                 {
-                    spawnPoint.position = originalSpawnLocations[spawnIdx].position;
-                    spawnPoint.eulerAngles = originalSpawnLocations[spawnIdx].rotation;
+                    spawnPoint.position = originalSpawnLocations[i].position;
+                    spawnPoint.eulerAngles = originalSpawnLocations[i].rotation;
                 }
             }
             else
             {
-                if (originalSpawnLocations[spawnIdx].position == new Vector3())
+                if (originalSpawnLocations[i].position == new Vector3())
                 {
-                    var origPos = originalSpawnLocations[spawnIdx];
+                    var origPos = originalSpawnLocations[i];
                     origPos.position = spawnPoint.position;
                     origPos.rotation = new Vector3(spawnPoint.rotation.eulerAngles.x, spawnPoint.rotation.eulerAngles.y, spawnPoint.rotation.eulerAngles.z);
-                    originalSpawnLocations[spawnIdx] = origPos;
+                    originalSpawnLocations[i] = origPos;
                 }
 
-                spawnPoint.position = spawnRemaps[spawnIdx].position;
-                spawnPoint.eulerAngles = spawnRemaps[spawnIdx].rotation;
+                spawnPoint.position = spawnRemaps[i].position;
+                spawnPoint.eulerAngles = spawnRemaps[i].rotation;
             }
         }
     }

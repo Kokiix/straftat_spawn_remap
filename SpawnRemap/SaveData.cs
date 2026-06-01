@@ -32,7 +32,8 @@ static class SaveData
         {
             if (File.Exists(_savePath))
                 spawnRemaps = JsonConvert.DeserializeObject<SpawnMappings>(File.ReadAllText(_savePath));
-            else
+
+            if (spawnRemaps == null)
             {
                 spawnRemaps = [];
                 Save();
