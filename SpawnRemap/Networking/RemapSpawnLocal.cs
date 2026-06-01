@@ -56,10 +56,13 @@ class RemapSpawnLocal : MonoBehaviour
                 return;
             }
 
-            if (spawnRemaps[spawnIdx].rotation == new Vector3() && originalSpawnLocations[spawnIdx].rotation != new Vector3())
+            if (spawnRemaps[spawnIdx].rotation == new Vector3())
             {
-                spawnPoint.position = originalSpawnLocations[spawnIdx].position;
-                spawnPoint.eulerAngles = originalSpawnLocations[spawnIdx].rotation;
+                if (originalSpawnLocations[spawnIdx].position != new Vector3())
+                {
+                    spawnPoint.position = originalSpawnLocations[spawnIdx].position;
+                    spawnPoint.eulerAngles = originalSpawnLocations[spawnIdx].rotation;
+                }
             }
             else
             {

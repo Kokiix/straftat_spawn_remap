@@ -49,7 +49,7 @@ class SpawnRemapCommands
         }
         if (spawnPointIndex == "all")
         {
-            spawns.Clear();
+            spawns = [new SpawnData(), new SpawnData(), new SpawnData(), new SpawnData()];
         }
         else if (int.TryParse(spawnPointIndex, out int spawnIdx))
         {

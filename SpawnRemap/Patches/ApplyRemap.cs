@@ -11,7 +11,7 @@ static class ApplyRemap
 
     static void DetermineRemapping(Scene s, LoadSceneMode mode)
     {
-        RemapSpawnLocal.originalSpawnLocations.Clear();
+        RemapSpawnLocal.originalSpawnLocations = [new SpawnData(), new SpawnData(), new SpawnData(), new SpawnData()];
         if (SaveData.spawnRemaps.ContainsKey(s.name))
             RemapSpawnLocal.SendSpawnPoints(SaveData.spawnRemaps[s.name]);
     }
