@@ -30,6 +30,8 @@
         <Reference Include="$(DLLs)\Assembly-CSharp.dll" Publicize="true" />
         <Reference Include="$(DLLs)\ComputerysModdingUtilities.dll" />
 
+        <Reference Include="$(DLLs)\FishNet.Runtime.dll" />
+
     </ItemGroup>
 
     <ItemGroup>

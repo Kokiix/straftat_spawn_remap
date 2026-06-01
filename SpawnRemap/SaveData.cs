@@ -11,8 +11,8 @@ using SpawnMappings = Dictionary<string, List<SpawnData>>;
 
 struct SpawnData
 {
-    Vector3 position;
-    Vector3 angle;
+    internal Vector3 position;
+    internal Vector3 angle;
 }
 
 static class SaveData
@@ -42,7 +42,7 @@ static class SaveData
         }
     }
 
-    static void Save()
+    internal static void Save()
     {
         try
         {

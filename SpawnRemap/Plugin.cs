@@ -5,6 +5,7 @@ using ComputerysModdingUtilities;
 using HarmonyLib;
 using UnityEngine;
 using SpawnRemap;
+using UnityEngine.SceneManagement;
 
 [assembly: StraftatMod(isVanillaCompatible: false)]
 
@@ -16,11 +17,16 @@ public class SRPlugin : BaseUnityPlugin
 
     void Awake()
     {
-        _harmony.PatchAll();
         this.gameObject.hideFlags = HideFlags.HideAndDontSave;
 
         InitConfig();
-        SaveData.Init();
+        var chatCommandsLoaded = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(ChatCommands.PluginInfo.PLUGIN_GUID);
+        if (chatCommandsLoaded)
+        {
+            // _harmony.CreateClassProcessor(typeof())
+            SaveData.Init();
+            RegisterCommands.R();
+        }
     }
 
     void InitConfig()
@@ -33,11 +39,19 @@ public class SRPlugin : BaseUnityPlugin
     }
 
     // Debug
-    void Update()
+    // void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.V))
+    //     {
+    //         Debug.LogError(SceneManager.GetActiveScene().name);
+    //     }
+    // }
+}
+
+static class RegisterCommands
+{
+    internal static void R()
     {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            Debug.LogError(SceneMotor.Instance.currentSceneName);
-        }
+        ChatCommands.CommandRegistry.RegisterCommandsFromAssembly();
     }
 }
