@@ -13,6 +13,7 @@ class RemapSpawnLocal : MonoBehaviour
     void Awake()
     {
         MyceliumNetwork.RegisterNetworkObject(this, MyceliumID);
+        originalSpawnLocations = [new SpawnData(), new SpawnData(), new SpawnData(), new SpawnData()];
     }
 
     internal static void SendSpawnPoints(List<SpawnData> spawns)
@@ -23,13 +24,13 @@ class RemapSpawnLocal : MonoBehaviour
             ReliableType.Reliable,
             JsonConvert.SerializeObject(spawns)
         );
-        Debug.LogError("sent RPC");
     }
+
+    internal static List<SpawnData> originalSpawnLocations; // Used for seeing live changes when removing spawns
 
     [CustomRPC]
     void MoveSpawnPoints(string spawnJSON)
     {
-        Debug.LogError("received RPC");
         List<SpawnData> spawnRemaps;
         try
         {
@@ -55,9 +56,20 @@ class RemapSpawnLocal : MonoBehaviour
                 return;
             }
 
-            if (spawnRemaps[spawnIdx].rotation == new Vector3()) continue;
-            spawnPoint.position = spawnRemaps[spawnIdx].position;
-            spawnPoint.eulerAngles = spawnRemaps[spawnIdx].rotation;
+            if (spawnRemaps[spawnIdx].rotation == new Vector3() && originalSpawnLocations[spawnIdx].rotation != new Vector3())
+            {
+                spawnPoint.position = originalSpawnLocations[spawnIdx].position;
+                spawnPoint.eulerAngles = originalSpawnLocations[spawnIdx].rotation;
+            }
+            else
+            {
+                var origPos = originalSpawnLocations[spawnIdx];
+                origPos.position = spawnPoint.position;
+                origPos.rotation = new Vector3(spawnPoint.rotation.eulerAngles.x, spawnPoint.rotation.eulerAngles.y, spawnPoint.rotation.eulerAngles.z);
+
+                spawnPoint.position = spawnRemaps[spawnIdx].position;
+                spawnPoint.eulerAngles = spawnRemaps[spawnIdx].rotation;
+            }
         }
     }
 }
