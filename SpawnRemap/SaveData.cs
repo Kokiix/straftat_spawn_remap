@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BepInEx;
+using Newtonsoft.Json;
 using SpawnRemap;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ static class SaveData
         try
         {
             if (File.Exists(_savePath))
-                spawnRemaps = JsonUtility.FromJson<SpawnMappings>(File.ReadAllText(_savePath));
+                spawnRemaps = JsonConvert.DeserializeObject<SpawnMappings>(File.ReadAllText(_savePath));
             else
             {
                 spawnRemaps = [];
@@ -46,7 +47,7 @@ static class SaveData
     {
         try
         {
-            File.WriteAllText(_savePath, JsonUtility.ToJson(spawnRemaps, prettyPrint: true));
+            File.WriteAllText(_savePath, JsonConvert.SerializeObject(spawnRemaps, Formatting.Indented));
         }
         catch (Exception e)
         {

@@ -30,7 +30,8 @@
         <Reference Include="$(DLLs)\Assembly-CSharp.dll" Publicize="true" />
         <Reference Include="$(DLLs)\ComputerysModdingUtilities.dll" />
 
-        <Reference Include="$(DLLs)\FishNet.Runtime.dll" />
+        <Reference Include="$(DLLs)\FishNet.Runtime.dll" /> <!-- For FPC inheritance in getting/storing player position/Transform -->
+        <Reference Include="$(DLLs)\Newtonsoft.Json.dll" /> <!-- For serializing dictionary -->
 
     </ItemGroup>
 
