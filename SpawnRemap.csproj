@@ -26,6 +26,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="kestrel-Chat_Commands" Version="*" />
+        <PackageReference Include="straftatmodding-MyceliumNetworking" Version="*" />
 
         <Reference Include="$(DLLs)\Assembly-CSharp.dll" Publicize="true" />
         <Reference Include="$(DLLs)\ComputerysModdingUtilities.dll" />

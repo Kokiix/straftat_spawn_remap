@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 [assembly: StraftatMod(isVanillaCompatible: false)]
 
 [BepInDependency(ChatCommands.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(MyceliumNetworking.MyPluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class SRPlugin : BaseUnityPlugin
 {
@@ -19,8 +20,12 @@ public class SRPlugin : BaseUnityPlugin
     {
         this.gameObject.hideFlags = HideFlags.HideAndDontSave;
 
-        InitConfig();
+        // InitConfig();
+
         SaveData.Init();
+        ApplyRemap.Init();
+
+        gameObject.AddComponent<RemapSpawnLocal>();
 
         // patchAll doesn't work because harmony explodes on custom attribute if chatcommands isnt loaded
         // _harmony.CreateClassProcessor(typeof())
@@ -30,9 +35,9 @@ public class SRPlugin : BaseUnityPlugin
             RegisterCommands();
     }
 
-    void InitConfig()
-    {
-    }
+    // void InitConfig()
+    // {
+    // }
 
     void OnDestroy()
     {
