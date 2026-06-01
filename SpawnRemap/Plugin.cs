@@ -20,13 +20,14 @@ public class SRPlugin : BaseUnityPlugin
         this.gameObject.hideFlags = HideFlags.HideAndDontSave;
 
         InitConfig();
+        SaveData.Init();
+
+        // patchAll doesn't work because harmony explodes on custom attribute if chatcommands isnt loaded
+        // _harmony.CreateClassProcessor(typeof())
+
         var chatCommandsLoaded = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(ChatCommands.PluginInfo.PLUGIN_GUID);
         if (chatCommandsLoaded)
-        {
-            // _harmony.CreateClassProcessor(typeof())
-            SaveData.Init();
-            RegisterCommands.R();
-        }
+            RegisterCommands();
     }
 
     void InitConfig()
@@ -38,6 +39,11 @@ public class SRPlugin : BaseUnityPlugin
         _harmony.UnpatchSelf();
     }
 
+    void RegisterCommands()
+    {
+        ChatCommands.CommandRegistry.RegisterCommandsFromAssembly();
+    }
+
     // Debug
     // void Update()
     // {
@@ -46,12 +52,4 @@ public class SRPlugin : BaseUnityPlugin
     //         Debug.LogError(SceneManager.GetActiveScene().name);
     //     }
     // }
-}
-
-static class RegisterCommands
-{
-    internal static void R()
-    {
-        ChatCommands.CommandRegistry.RegisterCommandsFromAssembly();
-    }
 }
