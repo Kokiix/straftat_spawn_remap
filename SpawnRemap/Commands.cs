@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ChatCommands;
 using ChatCommands.Attributes;
+using Newtonsoft.Json;
 using SpawnRemap;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -92,7 +93,25 @@ class SpawnRemapCommands
     [CommandAliases("srexp")]
     static string ExportSpawns()
     {
-
+        GUIUtility.systemCopyBuffer = SaveData.Compress(JsonConvert.SerializeObject(SaveData.spawnRemaps));
         return "Exported spawn data to clipboard!";
+    }
+
+    [Command("importspawns", "import spawn rebind code from your clipboard")]
+    [CommandAliases("srimp")]
+    static string ImportSpawns()
+    {
+        try
+        {
+            var jsonString = SaveData.Decompress(GUIUtility.systemCopyBuffer);
+            SaveData.spawnRemaps = JsonConvert.DeserializeObject<Dictionary<string, List<SpawnData>>>(jsonString);
+            SaveData.Save();
+        }
+        catch (System.Exception)
+        {
+            throw new CommandException("Invalid code!");
+        }
+
+        return "Imported spawn data!";
     }
 }

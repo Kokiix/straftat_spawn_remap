@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Text;
 using BepInEx;
 using Newtonsoft.Json;
 using SpawnRemap;
@@ -57,27 +59,50 @@ static class SaveData
         }
     }
 
-    internal static void Compress()
+    // COMP/DECOMP ARE VIBE CODED
+    internal static string Compress(string text)
     {
-        try
+        if (string.IsNullOrEmpty(text))
+            return text;
+
+        // Convert string to bytes
+        byte[] buffer = Encoding.UTF8.GetBytes(text);
+
+        using (var memoryStream = new MemoryStream())
         {
-            File.WriteAllText(_savePath, JsonConvert.SerializeObject(spawnRemaps, Formatting.Indented));
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"SpawnRemapper: Failed to save data {e}");
+            // DeflateStream is slightly faster and has less header overhead than GZipStream.
+            // If you specifically need gzip headers (for web APIs, etc.), replace DeflateStream with GZipStream.
+            using (var compressor = new DeflateStream(memoryStream, CompressionMode.Compress, true))
+            {
+                compressor.Write(buffer, 0, buffer.Length);
+            }
+
+            memoryStream.Position = 0;
+            byte[] compressedData = memoryStream.ToArray();
+
+            // Convert binary compressed data to a safe Base64 string
+            return Convert.ToBase64String(compressedData);
         }
     }
 
-    internal static void Decompress()
+    internal static string Decompress(string compressedText)
     {
-        try
+        if (string.IsNullOrEmpty(compressedText))
+            return compressedText;
+
+        // Convert Base64 string back to compressed bytes
+        byte[] compressedData = Convert.FromBase64String(compressedText);
+
+        using (var memoryStream = new MemoryStream(compressedData))
         {
-            File.WriteAllText(_savePath, JsonConvert.SerializeObject(spawnRemaps, Formatting.Indented));
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"SpawnRemapper: Failed to save data {e}");
+            using (var decompressor = new DeflateStream(memoryStream, CompressionMode.Decompress))
+            {
+                using (var resultStream = new MemoryStream())
+                {
+                    decompressor.CopyTo(resultStream);
+                    return Encoding.UTF8.GetString(resultStream.ToArray());
+                }
+            }
         }
     }
 }
